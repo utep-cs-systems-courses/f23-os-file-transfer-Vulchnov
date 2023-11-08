@@ -71,7 +71,6 @@ while 1:
                     print("sending '%s'" % byte.decode())
                     bytesSent = os.write(s.fileno(), byte)
                     byte = byte[bytesSent:]
-                print("Recived confirmation")
                 os.write(s.fileno(), os.read(inputFile, file_size))
                 os.write(s.fileno(), b"")
                 os.close(inputFile)

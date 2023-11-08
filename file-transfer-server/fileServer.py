@@ -30,21 +30,21 @@ s.listen(1)              # allow only one outstanding request
 conn, addr = s.accept()  # wait until incoming connection request (and accept it)
 print('Connected by', addr)
 
-read = conn.recv(1).decode()
+read = os.read(conn.fileno(), 1).decode()
 while read != "":
     fNameSize = ""
     fSize = ""
     while read != ":":
         fNameSize = fNameSize + read
-        read = conn.recv(1).decode()
-    fName = conn.recv(int(fNameSize)).decode()
+        read = os.read(conn.fileno(), 1).decode()
+    fName = os.read(conn.fileno(), int(fNameSize)).decode()
     outputFile = os.open(fName, os.O_WRONLY | os.O_CREAT)
-    read = conn.recv(1).decode()
+    read = os.read(conn.fileno(), 1).decode()
     while read != ":":
         fSize = fSize + read
-        read = conn.recv(1).decode()
-    os.write(outputFile, conn.recv(int(fSize)))
-    read = conn.recv(1).decode()
+        read = os.read(conn.fileno(), 1).decode()
+    os.write(outputFile, os.read(conn.fileno(), int(fSize)))
+    read = os.read(conn.fileno(), 1).decode()
 
 conn.shutdown(socket.SHUT_WR)
 conn.close()
